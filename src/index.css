@@ -1,0 +1,283 @@
+:root {
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  line-height: 1.5;
+  color: #e7ecf4;
+  background: #0f1218;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #0f1218;
+  color: #e7ecf4;
+}
+
+a {
+  color: #9ec2ff;
+  text-decoration: none;
+}
+
+#root {
+  width: 100%;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.hero {
+  padding: 20px;
+  border: 1px solid #2a3242;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  background: #1f2d3f;
+  margin-bottom: 8px;
+}
+
+.pill-row {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.pill {
+  background: #1b2431;
+  border: 1px solid #30415e;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.82rem;
+}
+
+.btn {
+  border: 1px solid #42536f;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #2c66d6;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #1a2230;
+  color: #dce6f9;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid #2a3242;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #121926;
+}
+
+.sub-card {
+  border: 1px solid #2b3548;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.context-panel,
+.result-panel,
+.warning-box,
+.success-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.context-panel,
+.result-panel {
+  background: #182235;
+  border: 1px solid #2d436e;
+}
+
+.warning-box {
+  background: #4a2c1a;
+  border: 1px solid #8c4d1d;
+}
+
+.success-box {
+  background: #153522;
+  border: 1px solid #2f6b46;
+  margin-bottom: 12px;
+}
+
+.skill-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.strong {
+  border-color: #226b5c;
+}
+
+.moderate {
+  border-color: #5f6b23;
+}
+
+.gaps {
+  border-color: #7a3b3b;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.jd-input,
+textarea,
+input,
+select {
+  width: 100%;
+  background: #0e1420;
+  color: #e7ecf4;
+  border: 1px solid #36445b;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.jd-input {
+  min-height: 140px;
+  margin-bottom: 10px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-drawer {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  width: min(420px, calc(100vw - 24px));
+  height: calc(100vh - 24px);
+  background: #131b29;
+  border: 1px solid #324562;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: #223251;
+  border: 1px solid #375486;
+  color: #e7ecf4;
+  border-radius: 999px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.chat-history {
+  margin-top: 10px;
+  flex: 1;
+  overflow: auto;
+  border: 1px solid #30445f;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.msg {
+  margin-bottom: 8px;
+}
+
+.msg.assistant {
+  color: #c0d7ff;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.footer {
+  margin-top: 20px;
+  border-top: 1px solid #27374e;
+  padding-top: 10px;
+  color: #b4c3dc;
+}
+
+.footer-links {
+  display: flex;
+  gap: 10px;
+  margin: 4px 0;
+}
