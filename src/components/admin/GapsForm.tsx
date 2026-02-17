@@ -13,6 +13,13 @@ export function GapsForm({ value, onSave }: Props) {
     setDraft((prev) => prev.map((item, i) => (i === index ? { ...item, ...patch } : item)))
   }
 
+  function parseList(input: string): string[] {
+    return input
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+
   return (
     <section className="card">
       <h3>Gaps & Weaknesses</h3>
@@ -30,6 +37,41 @@ export function GapsForm({ value, onSave }: Props) {
             <textarea
               value={gap.whyItsAGap}
               onChange={(e) => update(idx, { whyItsAGap: e.target.value })}
+            />
+          </label>
+          <label>
+            Role Types That Are Bad Fit (comma-separated)
+            <input
+              value={(gap.roleTypesBadFit || []).join(', ')}
+              onChange={(e) => update(idx, { roleTypesBadFit: parseList(e.target.value) })}
+            />
+          </label>
+          <label>
+            Work Environments To Avoid (comma-separated)
+            <input
+              value={(gap.environmentsToAvoid || []).join(', ')}
+              onChange={(e) => update(idx, { environmentsToAvoid: parseList(e.target.value) })}
+            />
+          </label>
+          <label>
+            Past Feedback
+            <textarea
+              value={gap.pastFeedback || ''}
+              onChange={(e) => update(idx, { pastFeedback: e.target.value })}
+            />
+          </label>
+          <label>
+            Improvement Areas (comma-separated)
+            <input
+              value={(gap.improvementAreas || []).join(', ')}
+              onChange={(e) => update(idx, { improvementAreas: parseList(e.target.value) })}
+            />
+          </label>
+          <label>
+            No-Interest Areas (comma-separated)
+            <input
+              value={(gap.noInterestAreas || []).join(', ')}
+              onChange={(e) => update(idx, { noInterestAreas: parseList(e.target.value) })}
             />
           </label>
         </div>

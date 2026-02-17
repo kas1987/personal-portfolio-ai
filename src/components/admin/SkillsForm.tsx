@@ -39,6 +39,36 @@ export function SkillsForm({ value, onSave }: Props) {
             </select>
           </label>
           <label>
+            Self Rating (1-5)
+            <input
+              type="number"
+              min={1}
+              max={5}
+              value={skill.selfRating}
+              onChange={(e) => update(idx, { selfRating: Number(e.target.value) || 1 })}
+            />
+          </label>
+          <label>
+            Evidence
+            <textarea value={skill.evidence} onChange={(e) => update(idx, { evidence: e.target.value })} />
+          </label>
+          <label>
+            Years Experience
+            <input
+              type="number"
+              step="0.5"
+              value={skill.yearsExperience ?? ''}
+              onChange={(e) => update(idx, { yearsExperience: Number(e.target.value) || undefined })}
+            />
+          </label>
+          <label>
+            Last Used
+            <input
+              value={skill.lastUsed || ''}
+              onChange={(e) => update(idx, { lastUsed: e.target.value || undefined })}
+            />
+          </label>
+          <label>
             Honest Notes
             <textarea
               value={skill.honestNotes}

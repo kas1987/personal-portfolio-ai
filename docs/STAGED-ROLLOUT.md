@@ -8,6 +8,7 @@ This project intentionally ships in controlled phases.
 - Data persistence is local-first by default, with remote Supabase mode available via `VITE_USE_REMOTE_STORAGE=true`.
 - AI behavior defaults to deterministic mock mode (`VITE_USE_MOCK_AI=true`).
 - Dev proxy can be enabled with `VITE_DEV_API_PROXY_TARGET`.
+- Admin auth can be required with `VITE_REQUIRE_ADMIN_AUTH=true`.
 
 ## Stage 1 (Enable JD Analyzer)
 
@@ -34,4 +35,11 @@ This project intentionally ships in controlled phases.
 1. Keep `upsertCandidateContext()` dual-safe (remote write + local sync fallback).
 2. Keep DTO field allowlists for public endpoints.
 3. Enforce RLS policies and service-role function access.
+
+## Required Validation Commands
+
+- `npm run calibrate`
+- `npm run regress`
+- `npm run lint`
+- `npm run build`
 

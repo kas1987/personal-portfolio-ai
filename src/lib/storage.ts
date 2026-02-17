@@ -11,7 +11,16 @@ export function loadContextFromStorage(): CandidateContext {
   }
 
   try {
-    return JSON.parse(raw) as CandidateContext
+    const parsed = JSON.parse(raw) as Partial<CandidateContext>
+    return {
+      ...seedContext,
+      ...parsed,
+      profile: { ...seedContext.profile, ...(parsed.profile || {}) },
+      valuesCultureFit: {
+        ...seedContext.valuesCultureFit,
+        ...(parsed.valuesCultureFit || {}),
+      },
+    }
   } catch {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(seedContext))
     return seedContext

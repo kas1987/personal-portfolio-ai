@@ -28,6 +28,14 @@ type ProfileRow = {
   known_for: string | null
   looking_for: string | null
   not_looking_for: string | null
+  management_style: string | null
+  work_style_preferences: string | null
+  must_haves: string[] | null
+  dealbreakers: string[] | null
+  team_size_preference: string | null
+  conflict_style: string | null
+  ambiguity_style: string | null
+  failure_style: string | null
 }
 
 function defaultContext(): CandidateContext {
@@ -65,12 +73,19 @@ function fromRows(
       knownFor: profile.known_for || '',
       lookingFor: profile.looking_for || '',
       notLookingFor: profile.not_looking_for || '',
+      managementStyle: profile.management_style || '',
+      workStylePreferences: profile.work_style_preferences || '',
     },
     experiences: experiences.map((exp) => ({
       id: String(exp.id),
       companyName: String(exp.company_name || ''),
       title: String(exp.title || ''),
+      titleProgression: exp.title_progression ? String(exp.title_progression) : undefined,
       dateRange: String(exp.date_range || ''),
+      startDate: exp.start_date ? String(exp.start_date) : undefined,
+      endDate: exp.end_date ? String(exp.end_date) : undefined,
+      isCurrent: Boolean(exp.is_current),
+      displayOrder: exp.display_order == null ? undefined : Number(exp.display_order),
       bulletPoints: Array.isArray(exp.bullet_points) ? exp.bullet_points.map(String) : [],
       aiContext: {
         situation: String(exp.situation || ''),
@@ -80,8 +95,13 @@ function fromRows(
         whyJoined: exp.why_joined ? String(exp.why_joined) : undefined,
         whyLeft: exp.why_left ? String(exp.why_left) : undefined,
         actualContributions: exp.actual_contributions ? String(exp.actual_contributions) : undefined,
+        proudestAchievement: exp.proudest_achievement ? String(exp.proudest_achievement) : undefined,
+        wouldDoDifferently: exp.would_do_differently ? String(exp.would_do_differently) : undefined,
+        challengesFaced: exp.challenges_faced ? String(exp.challenges_faced) : undefined,
         managerWouldSay: exp.manager_would_say ? String(exp.manager_would_say) : undefined,
         reportsWouldSay: exp.reports_would_say ? String(exp.reports_would_say) : undefined,
+        conflictsOrChallenges: exp.conflicts_challenges ? String(exp.conflicts_challenges) : undefined,
+        quantifiedImpact: exp.quantified_impact ? String(exp.quantified_impact) : undefined,
       },
     })),
     skills: skills.map((item) => ({
@@ -100,11 +120,25 @@ function fromRows(
       description: String(gap.description || ''),
       whyItsAGap: String(gap.why_its_a_gap || ''),
       interestInLearning: Boolean(gap.interest_in_learning),
+      roleTypesBadFit: Array.isArray(gap.role_types_bad_fit)
+        ? gap.role_types_bad_fit.map(String)
+        : undefined,
+      environmentsToAvoid: Array.isArray(gap.environments_to_avoid)
+        ? gap.environments_to_avoid.map(String)
+        : undefined,
+      pastFeedback: gap.past_feedback ? String(gap.past_feedback) : undefined,
+      improvementAreas: Array.isArray(gap.improvement_areas)
+        ? gap.improvement_areas.map(String)
+        : undefined,
+      noInterestAreas: Array.isArray(gap.no_interest_areas)
+        ? gap.no_interest_areas.map(String)
+        : undefined,
     })),
     faqResponses: faqResponses.map((faq) => ({
       id: String(faq.id),
       question: String(faq.question || ''),
       answer: String(faq.answer || ''),
+      isCommonQuestion: Boolean(faq.is_common_question),
     })),
     aiInstructions: aiInstructions.map((instruction) => ({
       id: String(instruction.id),
@@ -112,6 +146,14 @@ function fromRows(
       instruction: String(instruction.instruction || ''),
       priority: Number(instruction.priority || 50),
     })),
+    valuesCultureFit: {
+      mustHaves: profile.must_haves || [],
+      dealbreakers: profile.dealbreakers || [],
+      teamSizePreference: profile.team_size_preference || '',
+      conflictStyle: profile.conflict_style || '',
+      ambiguityStyle: profile.ambiguity_style || '',
+      failureStyle: profile.failure_style || '',
+    },
   }
 }
 
@@ -173,6 +215,14 @@ async function writeRemoteCandidateContext(next: CandidateContext): Promise<bool
     known_for: next.profile.knownFor || null,
     looking_for: next.profile.lookingFor || null,
     not_looking_for: next.profile.notLookingFor || null,
+    management_style: next.profile.managementStyle || null,
+    work_style_preferences: next.profile.workStylePreferences || null,
+    must_haves: next.valuesCultureFit.mustHaves || [],
+    dealbreakers: next.valuesCultureFit.dealbreakers || [],
+    team_size_preference: next.valuesCultureFit.teamSizePreference || null,
+    conflict_style: next.valuesCultureFit.conflictStyle || null,
+    ambiguity_style: next.valuesCultureFit.ambiguityStyle || null,
+    failure_style: next.valuesCultureFit.failureStyle || null,
   }
 
   const upsertResult = await supabase.from('candidate_profile').upsert(profilePayload)
@@ -194,7 +244,12 @@ async function writeRemoteCandidateContext(next: CandidateContext): Promise<bool
             candidate_id: profileId,
             company_name: exp.companyName,
             title: exp.title,
+            title_progression: exp.titleProgression || null,
             date_range: exp.dateRange,
+            start_date: exp.startDate || null,
+            end_date: exp.endDate || null,
+            is_current: exp.isCurrent ?? false,
+            display_order: exp.displayOrder ?? null,
             bullet_points: exp.bulletPoints,
             situation: exp.aiContext.situation,
             approach: exp.aiContext.approach,
@@ -203,8 +258,13 @@ async function writeRemoteCandidateContext(next: CandidateContext): Promise<bool
             why_joined: exp.aiContext.whyJoined || null,
             why_left: exp.aiContext.whyLeft || null,
             actual_contributions: exp.aiContext.actualContributions || null,
+            proudest_achievement: exp.aiContext.proudestAchievement || null,
+            would_do_differently: exp.aiContext.wouldDoDifferently || null,
+            challenges_faced: exp.aiContext.challengesFaced || null,
             manager_would_say: exp.aiContext.managerWouldSay || null,
             reports_would_say: exp.aiContext.reportsWouldSay || null,
+            conflicts_challenges: exp.aiContext.conflictsOrChallenges || null,
+            quantified_impact: exp.aiContext.quantifiedImpact || null,
           })),
         )
       : Promise.resolve({ error: null }),
@@ -232,6 +292,11 @@ async function writeRemoteCandidateContext(next: CandidateContext): Promise<bool
             description: gap.description,
             why_its_a_gap: gap.whyItsAGap,
             interest_in_learning: gap.interestInLearning,
+            role_types_bad_fit: gap.roleTypesBadFit || [],
+            environments_to_avoid: gap.environmentsToAvoid || [],
+            past_feedback: gap.pastFeedback || null,
+            improvement_areas: gap.improvementAreas || [],
+            no_interest_areas: gap.noInterestAreas || [],
           })),
         )
       : Promise.resolve({ error: null }),
@@ -242,6 +307,7 @@ async function writeRemoteCandidateContext(next: CandidateContext): Promise<bool
             candidate_id: profileId,
             question: faq.question,
             answer: faq.answer,
+            is_common_question: faq.isCommonQuestion ?? false,
           })),
         )
       : Promise.resolve({ error: null }),

@@ -9,6 +9,13 @@ type Props = {
 export function ProfileForm({ value, onSave }: Props) {
   const [draft, setDraft] = useState<CandidateProfile>(value)
 
+  function parseList(input: string): string[] {
+    return input
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+
   return (
     <section className="card">
       <h3>Basic Profile</h3>
@@ -21,14 +28,63 @@ export function ProfileForm({ value, onSave }: Props) {
           />
         </label>
         <label>
-          Title
+          Current Title
           <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
         </label>
         <label>
-          Availability Status
+          Target Titles (comma-separated)
           <input
-            value={draft.availabilityStatus}
-            onChange={(e) => setDraft({ ...draft, availabilityStatus: e.target.value })}
+            value={draft.targetTitles.join(', ')}
+            onChange={(e) => setDraft({ ...draft, targetTitles: parseList(e.target.value) })}
+          />
+        </label>
+        <label>
+          Target Company Stages (comma-separated)
+          <input
+            value={draft.targetCompanyStages.join(', ')}
+            onChange={(e) => setDraft({ ...draft, targetCompanyStages: parseList(e.target.value) })}
+          />
+        </label>
+        <label>
+          Location
+          <input value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} />
+        </label>
+        <label>
+          Remote Preference
+          <input
+            value={draft.remotePreference}
+            onChange={(e) => setDraft({ ...draft, remotePreference: e.target.value })}
+          />
+        </label>
+        <label>
+          Availability Status + Date
+          <input
+            value={`${draft.availabilityStatus}${draft.availabilityDate ? ` (${draft.availabilityDate})` : ''}`}
+            onChange={(e) => {
+              const raw = e.target.value
+              const dateMatch = raw.match(/\(([^)]+)\)\s*$/)
+              setDraft({
+                ...draft,
+                availabilityStatus: raw.replace(/\s*\([^)]+\)\s*$/, '').trim(),
+                availabilityDate: dateMatch ? dateMatch[1] : undefined,
+              })
+            }}
+          />
+        </label>
+        <label>
+          Salary Min
+          <input
+            type="number"
+            value={draft.salaryMin || ''}
+            onChange={(e) => setDraft({ ...draft, salaryMin: Number(e.target.value) || undefined })}
+          />
+        </label>
+        <label>
+          Salary Max
+          <input
+            type="number"
+            value={draft.salaryMax || ''}
+            onChange={(e) => setDraft({ ...draft, salaryMax: Number(e.target.value) || undefined })}
           />
         </label>
         <label>
@@ -37,6 +93,24 @@ export function ProfileForm({ value, onSave }: Props) {
             value={draft.socialLinks.linkedin || ''}
             onChange={(e) =>
               setDraft({ ...draft, socialLinks: { ...draft.socialLinks, linkedin: e.target.value } })
+            }
+          />
+        </label>
+        <label>
+          GitHub
+          <input
+            value={draft.socialLinks.github || ''}
+            onChange={(e) =>
+              setDraft({ ...draft, socialLinks: { ...draft.socialLinks, github: e.target.value } })
+            }
+          />
+        </label>
+        <label>
+          Email
+          <input
+            value={draft.socialLinks.email || ''}
+            onChange={(e) =>
+              setDraft({ ...draft, socialLinks: { ...draft.socialLinks, email: e.target.value } })
             }
           />
         </label>
@@ -53,6 +127,35 @@ export function ProfileForm({ value, onSave }: Props) {
         <textarea
           value={draft.careerNarrative}
           onChange={(e) => setDraft({ ...draft, careerNarrative: e.target.value })}
+        />
+      </label>
+      <label>
+        What You're Known For
+        <textarea value={draft.knownFor} onChange={(e) => setDraft({ ...draft, knownFor: e.target.value })} />
+      </label>
+      <label>
+        What You're Looking For
+        <textarea value={draft.lookingFor} onChange={(e) => setDraft({ ...draft, lookingFor: e.target.value })} />
+      </label>
+      <label>
+        What You're Not Looking For
+        <textarea
+          value={draft.notLookingFor}
+          onChange={(e) => setDraft({ ...draft, notLookingFor: e.target.value })}
+        />
+      </label>
+      <label>
+        Management Style
+        <textarea
+          value={draft.managementStyle || ''}
+          onChange={(e) => setDraft({ ...draft, managementStyle: e.target.value })}
+        />
+      </label>
+      <label>
+        Work Style Preferences
+        <textarea
+          value={draft.workStylePreferences || ''}
+          onChange={(e) => setDraft({ ...draft, workStylePreferences: e.target.value })}
         />
       </label>
       <button className="btn btn-primary" onClick={() => onSave(draft)}>

@@ -16,7 +16,7 @@ export function Navbar({ onAskAI }: Props) {
         <NavLink to="/admin">Admin</NavLink>
       </nav>
       <button className="btn btn-primary" onClick={onAskAI}>
-        Ask AI
+        Ask AI <span className="new-badge">New</span>
       </button>
     </header>
   )

@@ -22,13 +22,20 @@ export interface CandidateProfile {
   knownFor: string
   lookingFor: string
   notLookingFor: string
+  managementStyle?: string
+  workStylePreferences?: string
 }
 
 export interface Experience {
   id: string
   companyName: string
   title: string
+  titleProgression?: string
   dateRange: string
+  startDate?: string
+  endDate?: string
+  isCurrent?: boolean
+  displayOrder?: number
   bulletPoints: string[]
   aiContext: {
     situation: string
@@ -38,8 +45,13 @@ export interface Experience {
     whyJoined?: string
     whyLeft?: string
     actualContributions?: string
+    proudestAchievement?: string
+    wouldDoDifferently?: string
+    challengesFaced?: string
     managerWouldSay?: string
     reportsWouldSay?: string
+    conflictsOrChallenges?: string
+    quantifiedImpact?: string
   }
 }
 
@@ -62,12 +74,18 @@ export interface GapWeakness {
   description: string
   whyItsAGap: string
   interestInLearning: boolean
+  roleTypesBadFit?: string[]
+  environmentsToAvoid?: string[]
+  pastFeedback?: string
+  improvementAreas?: string[]
+  noInterestAreas?: string[]
 }
 
 export interface FAQResponse {
   id: string
   question: string
   answer: string
+  isCommonQuestion?: boolean
 }
 
 export interface AIInstruction {
@@ -77,6 +95,15 @@ export interface AIInstruction {
   priority: number
 }
 
+export interface ValuesCultureFit {
+  mustHaves: string[]
+  dealbreakers: string[]
+  teamSizePreference: string
+  conflictStyle: string
+  ambiguityStyle: string
+  failureStyle: string
+}
+
 export interface CandidateContext {
   profile: CandidateProfile
   experiences: Experience[]
@@ -84,6 +111,7 @@ export interface CandidateContext {
   gaps: GapWeakness[]
   faqResponses: FAQResponse[]
   aiInstructions: AIInstruction[]
+  valuesCultureFit: ValuesCultureFit
 }
 
 export interface JDGap {

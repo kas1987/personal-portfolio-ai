@@ -21,7 +21,7 @@ export function ExperienceCard({ experience }: Props) {
         ))}
       </ul>
       <button className="btn btn-secondary" onClick={() => setExpanded((v) => !v)}>
-        {expanded ? 'Hide AI Context' : 'Show AI Context'}
+        {expanded ? 'Hide AI Context' : '✨ Show AI Context'}
       </button>
       {expanded && (
         <div className="context-panel">

@@ -35,8 +35,31 @@ Copy `.env.example` to `.env` and adjust:
 - `VITE_USE_MOCK_AI=true` keeps analyzer/chat deterministic and local-first.
 - Set `VITE_USE_MOCK_AI=false` when edge functions are enabled.
 - Set `VITE_USE_REMOTE_STORAGE=true` to prefer Supabase CRUD (with local fallback).
+- Set `VITE_REQUIRE_ADMIN_AUTH=true` to protect `/admin` with magic-link auth.
 - Set `VITE_DEV_API_PROXY_TARGET` in local dev when proxying `/api/*` to edge functions.
 - Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` when wiring live Supabase reads/writes.
+
+For production, use `.env.production.example` as the template and set:
+
+- `VITE_API_BASE_URL=https://<project-ref>.supabase.co/functions/v1`
+- `VITE_USE_MOCK_AI=false`
+- `VITE_USE_REMOTE_STORAGE=true`
+- `VITE_REQUIRE_ADMIN_AUTH=true`
+
+## Quality gates
+
+```bash
+npm run calibrate
+npm run regress
+npm run lint
+npm run build
+```
+
+## Launch docs
+
+- `docs/LOVABLE-SPEC-CHECKLIST.md`
+- `docs/DEPLOYMENT-CHECKLIST.md`
+- `docs/LAUNCH-EVIDENCE.md`
 
 ## Contracts and boundaries
 

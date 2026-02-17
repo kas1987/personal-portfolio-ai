@@ -11,11 +11,9 @@ const weakExample = `Seeking a senior iOS engineer with 8+ years of Swift/UIKit 
 
 export function FitAssessment({ context }: Props) {
   const [jobDescription, setJobDescription] = useState('')
-  const [exampleMode, setExampleMode] = useState<'strong' | 'weak'>('strong')
   const analyzer = useJDAnalyzer(context)
 
   function setExample(mode: 'strong' | 'weak') {
-    setExampleMode(mode)
     setJobDescription(mode === 'strong' ? strongExample : weakExample)
   }
 
@@ -49,9 +47,7 @@ export function FitAssessment({ context }: Props) {
 
       {analyzer.data && (
         <div className="result-panel">
-          <h4>
-            Honest Assessment — {analyzer.data.result.verdict} {exampleMode === 'weak' ? '⚠' : '✓'}
-          </h4>
+          <h4>⚠ Honest Assessment — {analyzer.data.result.headline}</h4>
           <p>{analyzer.data.result.opening}</p>
           <h5>Where I Don't Fit</h5>
           <ul>
@@ -72,6 +68,10 @@ export function FitAssessment({ context }: Props) {
           )}
         </div>
       )}
+      <div className="philosophy-callout">
+        This signals something different than please consider my resume. You are qualifying fit from
+        both sides, and your time is valuable too.
+      </div>
     </section>
   )
 }

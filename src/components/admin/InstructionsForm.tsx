@@ -40,6 +40,14 @@ export function InstructionsForm({ value, onSave }: Props) {
               onChange={(e) => update(idx, { instruction: e.target.value })}
             />
           </label>
+          <label>
+            Priority
+            <input
+              type="number"
+              value={instruction.priority}
+              onChange={(e) => update(idx, { priority: Number(e.target.value) || 0 })}
+            />
+          </label>
         </div>
       ))}
       <button className="btn btn-primary" onClick={() => onSave(draft)}>

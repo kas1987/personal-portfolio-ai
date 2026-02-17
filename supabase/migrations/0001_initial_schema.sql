@@ -1,10 +1,10 @@
 -- Portfolio AI: baseline relational schema
 -- Public/private boundaries are enforced by explicit projection views.
 
-create extension if not exists "uuid-ossp";
+create extension if not exists pgcrypto;
 
 create table if not exists candidate_profile (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   full_name text not null,
   email text,
   title text not null,
@@ -28,7 +28,7 @@ create table if not exists candidate_profile (
 );
 
 create table if not exists experiences (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   company_name text not null,
   title text not null,
@@ -48,7 +48,7 @@ create table if not exists experiences (
 );
 
 create table if not exists skills (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   skill_name text not null,
   category text not null check (category in ('strong', 'moderate', 'gap')),
@@ -62,7 +62,7 @@ create table if not exists skills (
 );
 
 create table if not exists gaps_weaknesses (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   gap_type text not null check (gap_type in ('skill', 'experience', 'environment', 'role_type')),
   description text not null,
@@ -73,7 +73,7 @@ create table if not exists gaps_weaknesses (
 );
 
 create table if not exists faq_responses (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   question text not null,
   answer text not null,
@@ -82,7 +82,7 @@ create table if not exists faq_responses (
 );
 
 create table if not exists ai_instructions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   instruction_type text not null check (instruction_type in ('honesty', 'tone', 'boundaries')),
   instruction text not null,
@@ -93,7 +93,7 @@ create table if not exists ai_instructions (
 );
 
 create table if not exists chat_history (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   candidate_id uuid not null references candidate_profile(id) on delete cascade,
   session_id text not null,
   role text not null check (role in ('user', 'assistant', 'system')),

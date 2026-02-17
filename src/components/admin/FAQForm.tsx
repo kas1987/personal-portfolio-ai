@@ -29,6 +29,14 @@ export function FAQForm({ value, onSave }: Props) {
             Answer
             <textarea value={faq.answer} onChange={(e) => update(idx, { answer: e.target.value })} />
           </label>
+          <label>
+            Common Interview Question
+            <input
+              type="checkbox"
+              checked={Boolean(faq.isCommonQuestion)}
+              onChange={(e) => update(idx, { isCommonQuestion: e.target.checked })}
+            />
+          </label>
         </div>
       ))}
       <button className="btn btn-primary" onClick={() => onSave(draft)}>

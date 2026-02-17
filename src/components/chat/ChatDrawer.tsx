@@ -18,7 +18,7 @@ export function ChatDrawer({ open, onClose, context }: Props) {
   return (
     <aside className="chat-drawer">
       <div className="drawer-header">
-        <strong>Ask AI</strong>
+        <strong>Ask AI About Me</strong>
         <button className="btn btn-secondary" onClick={onClose}>
           Close
         </button>
