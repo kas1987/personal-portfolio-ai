@@ -69,44 +69,81 @@ function detectOverclaimLanguage(text: string): string[] {
   return banned.filter((word) => lower.includes(word))
 }
 
-function fallbackAnalyze(jobDescription: string): JDAnalysisResult {
-  const jd = jobDescription.toLowerCase()
-  const mentionsMobile = jd.includes('mobile') || jd.includes('ios') || jd.includes('android')
-  const mentionsFinance = jd.includes('finance') || jd.includes('fp&a') || jd.includes('forecast')
-  if (mentionsMobile && !mentionsFinance) {
+const FALLBACK_CONTEXT = `
+## About Kris SayreSmith
+
+Kris is a licensed CPA with 15+ years of corporate FP&A leadership at companies including Reynolds American (Fortune 500, $90M P&L ownership), Glatfelter, NBEO, and Sealed Air. Kris now runs an independent AI Finance Assessment practice helping mid-market finance teams identify where AI can improve their operations.
+
+## The AI Finance Assessment
+
+A fixed-fee, 2-week engagement at $3,500 that delivers:
+1. Current-state workflow map — where the finance team's time actually goes
+2. AI readiness score — which workflows are ready for automation now vs. later
+3. Prioritized recommendation — which tools to build or buy, in what sequence
+4. Implementation roadmap — a realistic 90-day action plan
+
+## Best-Fit Clients
+
+CFOs, Controllers, or VP Finance at companies with 50–500 employees who:
+- Suspect AI can help but don't know where to start
+- Have a close cycle, variance reporting, or forecasting process that feels manual
+- Are evaluating finance software (Adaptive, Anaplan, Planful, Vena) and want independent guidance
+
+## Not a Fit
+
+- Tax compliance, audit, or attestation work
+- Companies with fewer than 20 employees or no dedicated finance function
+- Organizations already mid-implementation needing execution support only
+- Tobacco or nicotine industry (non-compete restrictions currently apply)
+`.trim()
+
+function fallbackAnalyze(clientDescription: string): JDAnalysisResult {
+  const desc = clientDescription.toLowerCase()
+  const mentionsFinanceOps = (
+    desc.includes('fp&a') || desc.includes('forecast') || desc.includes('budget') ||
+    desc.includes('variance') || desc.includes('close') || desc.includes('reporting') ||
+    desc.includes('automation') || desc.includes('finance') || desc.includes('controller') ||
+    desc.includes('cfo') || desc.includes('excel') || desc.includes('reconciliation')
+  )
+  const mentionsOutOfScope = (
+    desc.includes('tax') || desc.includes('audit') || desc.includes('attestation') ||
+    desc.includes('compliance') || desc.includes('startup') && desc.includes('seed')
+  )
+  if (mentionsOutOfScope && !mentionsFinanceOps) {
     return {
       verdict: 'probably_not',
-      headline: 'Probably not your person for this role',
-      opening: 'This role appears mobile-engineering heavy, which does not match my core background.',
+      headline: 'Outside the scope of the AI Finance Assessment',
+      opening: 'The situation you described sounds like it falls outside what the AI Finance Assessment addresses.',
       gaps: [
         {
-          requirement: 'Deep production mobile engineering',
-          gapTitle: 'Mobile engineering depth',
-          explanation: 'My background is finance transformation and systems operations.',
+          requirement: 'Finance operations automation opportunity',
+          gapTitle: 'Scope mismatch',
+          explanation: 'The assessment focuses on FP&A automation — variance reporting, forecasting, close cycle, and recurring reporting. Tax, audit, or compliance work is a different scope.',
         },
       ],
-      transfers: 'I can help with planning, analytics, and operating model rigor if needed.',
-      recommendation: "If this role needs immediate mobile execution, I'm probably not your person.",
+      transfers: 'If there is a finance operations component alongside the compliance need, that portion may be in scope.',
+      recommendation: 'Probably not the right engagement. Worth a brief conversation if there are FP&A automation needs alongside the compliance work.',
     }
   }
   return {
-    verdict: mentionsFinance ? 'strong_fit' : 'worth_conversation',
-    headline: mentionsFinance ? 'Strong fit for this scope' : 'Worth a conversation',
-    opening: 'I align most with finance-operations systems work and measurable process outcomes.',
-    gaps: mentionsFinance
+    verdict: mentionsFinanceOps ? 'strong_fit' : 'worth_conversation',
+    headline: mentionsFinanceOps ? 'Looks like a good fit for the AI Finance Assessment' : 'Worth a conversation to assess fit',
+    opening: mentionsFinanceOps
+      ? 'The finance operations challenges you described align well with what the AI Finance Assessment addresses.'
+      : 'There may be a fit here, but I need more information about the specific finance workflows to assess it.',
+    gaps: mentionsFinanceOps
       ? []
       : [
           {
-            requirement: 'Domain depth not explicit in my recent scope',
-            gapTitle: 'Domain specificity',
-            explanation: 'Transfer is likely, but ramp-up is expected.',
+            requirement: 'Specific FP&A automation opportunity',
+            gapTitle: 'Scope clarity needed',
+            explanation: 'The assessment works best when there are defined recurring workflows — close cycle, variance reporting, or forecasting — that currently feel manual.',
           },
         ],
-    transfers: 'I bring structured planning, governance, and execution discipline.',
-    recommendation:
-      mentionsFinance
-        ? 'Proceed with conversation for strategy and execution ownership.'
-        : 'Proceed only if you value systems translation and measurable process outcomes.',
+    transfers: 'The assessment methodology works across industries. Finance process maturity and data structure matter more than the specific vertical.',
+    recommendation: mentionsFinanceOps
+      ? 'Schedule a discovery call. I can scope the assessment and confirm fit within 30 minutes.'
+      : 'Happy to have a brief conversation to see if the finance operations side of your business is a fit.',
   }
 }
 
@@ -127,7 +164,7 @@ async function callLlm(jobDescription: string, systemPrompt: string): Promise<JD
       messages: [
         {
           role: 'user',
-          content: `Analyze this job description and respond with strict JSON only:\n\n${jobDescription}`,
+          content: `Analyze this client's finance situation for consulting fit and respond with strict JSON only:\n\n${jobDescription}`,
         },
       ],
     }
@@ -152,7 +189,7 @@ async function callLlm(jobDescription: string, systemPrompt: string): Promise<JD
         { role: 'system', content: systemPrompt },
         {
           role: 'user',
-          content: `Analyze this job description and respond with strict JSON only:\n\n${jobDescription}`,
+          content: `Analyze this client's finance situation for consulting fit and respond with strict JSON only:\n\n${jobDescription}`,
         },
       ],
     }
@@ -204,13 +241,13 @@ async function fetchCandidateBundle(
 function buildContextPrompt(bundle: CandidateBundle): string {
   const profile = bundle.profile || {}
   const intro =
-    `Candidate name: ${String(profile.full_name || '')}\n` +
+    `Consultant name: ${String(profile.full_name || '')}\n` +
     `Title: ${String(profile.title || '')}\n` +
-    `Career narrative: ${String(profile.career_narrative || '')}\n` +
-    `Looking for: ${String(profile.looking_for || '')}\n` +
-    `Not looking for: ${String(profile.not_looking_for || '')}\n` +
-    `Management style: ${String(profile.management_style || '')}\n` +
-    `Work style preferences: ${String(profile.work_style_preferences || '')}`
+    `Background: ${String(profile.career_narrative || '')}\n` +
+    `Best-fit clients: ${String(profile.looking_for || '')}\n` +
+    `Not a fit: ${String(profile.not_looking_for || '')}\n` +
+    `Engagement style: ${String(profile.management_style || '')}\n` +
+    `How I work: ${String(profile.work_style_preferences || '')}`
 
   const roles = bundle.experiences
     .map((exp) => {
@@ -246,13 +283,13 @@ function buildContextPrompt(bundle: CandidateBundle): string {
   const instructions = bundle.instructions.map((i) => `P${String(i.priority || 0)}: ${String(i.instruction || '')}`).join('\n')
 
   return [
-    '## Candidate Profile',
+    '## Consultant Profile',
     intro,
-    '## Experience Deep Dive',
+    '## Experience',
     roles,
     '## Skills',
     skills,
-    '## Explicit Gaps',
+    '## Service Limits',
     gaps,
     '## FAQ',
     faq,
@@ -282,16 +319,25 @@ serve(async (req) => {
 
   const bundle = db ? await fetchCandidateBundle(db) : null
   const contextBlock = bundle ? buildContextPrompt(bundle) : ''
+  const activeContext = contextBlock || FALLBACK_CONTEXT
 
   const systemPrompt =
-    `You are an honest career fit assessor.\n` +
+    `You are an honest consulting fit assessor for Kris SayreSmith's AI Finance Assessment practice.\n` +
+    `A potential client has described their organization's finance situation or challenges.\n` +
+    `Your job: determine whether Kris's AI Finance Assessment ($3,500 fixed fee, 2-week engagement) is a good fit.\n` +
     `You must avoid flattery, avoid overclaiming, and clearly state non-fit when appropriate.\n` +
-    `If there are major gaps, explicitly say "I'm probably not your person" in recommendation.\n` +
+    `If the situation is outside scope, explicitly say so in the recommendation.\n` +
     `Always return strict JSON with keys: verdict, headline, opening, gaps, transfers, recommendation.\n` +
     `Allowed verdict values: strong_fit, worth_conversation, probably_not, needs_clarification.\n` +
-    `If major requirements are missing, choose probably_not or needs_clarification.\n` +
+    `strong_fit: Clear FP&A automation opportunity, appropriate company size (50-500 employees), finance team exists.\n` +
+    `worth_conversation: Plausible need but scope or fit is unclear.\n` +
+    `probably_not: Outside assessment scope — tax, audit, compliance, implementation support, or company too small/large.\n` +
+    `needs_clarification: Not enough information to assess fit.\n` +
+    `gaps[]: Key mismatches between what they described and what the assessment delivers.\n` +
+    `transfers: Where Kris's background applies to their situation.\n` +
+    `recommendation: Direct advice on whether to schedule a discovery call.\n` +
     `Gap object keys must be requirement, gapTitle, explanation.\n` +
-    (contextBlock ? `\nCandidate context:\n${contextBlock}\n` : '')
+    `\nConsulting context:\n${activeContext}\n`
 
   const payload = (await callLlm(jobDescription, systemPrompt)) || fallbackAnalyze(jobDescription)
 

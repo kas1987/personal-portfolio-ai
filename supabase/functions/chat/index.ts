@@ -107,6 +107,38 @@ function detectOverclaimLanguage(text: string): string[] {
   return banned.filter((term) => lower.includes(term))
 }
 
+const FALLBACK_CONTEXT = `
+## About Kris SayreSmith
+
+Kris is a licensed CPA with 15+ years of corporate FP&A leadership at companies including Reynolds American (Fortune 500, $90M P&L ownership), Glatfelter, NBEO, and Sealed Air. Kris now runs an independent AI Finance Assessment practice helping mid-market finance teams identify where AI can improve their operations.
+
+## The AI Finance Assessment
+
+A fixed-fee, 2-week engagement at $3,500 that delivers:
+1. Current-state workflow map — where the finance team's time actually goes
+2. AI readiness score — which workflows are ready for automation now vs. later
+3. Prioritized recommendation — which tools to build or buy, in what sequence
+4. Implementation roadmap — a realistic 90-day action plan
+
+## Best-Fit Clients
+
+CFOs, Controllers, or VP Finance at companies with 50–500 employees who:
+- Suspect AI can help but don't know where to start
+- Have a close cycle, variance reporting, or forecasting process that feels manual
+- Are evaluating finance software (Adaptive, Anaplan, Planful, Vena) and want independent guidance
+
+## Not a Fit
+
+- Tax compliance, audit, or attestation work
+- Companies with fewer than 20 employees or no dedicated finance function
+- Organizations already mid-implementation needing execution support only
+- Tobacco or nicotine industry (non-compete restrictions currently apply)
+
+## Contact
+
+Email: kas41866@gmail.com
+`.trim()
+
 async function fetchCandidateBundle(
   db: ReturnType<typeof createClient>,
   sessionId: string,
@@ -139,11 +171,11 @@ function buildContextPrompt(bundle: CandidateBundle): string {
     `Name: ${String(profile.full_name || '')}\n` +
     `Title: ${String(profile.title || '')}\n` +
     `Pitch: ${String(profile.elevator_pitch || '')}\n` +
-    `Career narrative: ${String(profile.career_narrative || '')}\n` +
-    `Looking for: ${String(profile.looking_for || '')}\n` +
-    `Not looking for: ${String(profile.not_looking_for || '')}\n` +
-    `Management style: ${String(profile.management_style || '')}\n` +
-    `Work style preferences: ${String(profile.work_style_preferences || '')}`
+    `Background: ${String(profile.career_narrative || '')}\n` +
+    `Best-fit clients: ${String(profile.looking_for || '')}\n` +
+    `Not a fit: ${String(profile.not_looking_for || '')}\n` +
+    `Engagement style: ${String(profile.management_style || '')}\n` +
+    `How I work: ${String(profile.work_style_preferences || '')}`
 
   const experienceBlock = bundle.experiences
     .map((exp) => {
@@ -178,13 +210,13 @@ function buildContextPrompt(bundle: CandidateBundle): string {
   const policyBlock = bundle.instructions.map((i) => `P${String(i.priority || 0)}: ${String(i.instruction || '')}`).join('\n')
 
   return [
-    '## Candidate Summary',
+    '## Consultant Summary',
     profileBlock,
     '## Experience',
     experienceBlock,
     '## Skills',
     skillsBlock,
-    '## Explicit Gaps',
+    '## Service Limits',
     gapsBlock,
     '## FAQ',
     faqBlock,
@@ -226,23 +258,25 @@ serve(async (req) => {
     .map((item) => `${String(item.role || 'user')}: ${String(item.content || '')}`)
     .join('\n')
 
+  const activeContext = contextBlock || FALLBACK_CONTEXT
   const systemPrompt =
-    `You are the candidate's AI portfolio assistant.\n` +
-    `Always be honest and concrete.\n` +
-    `Never fabricate achievements.\n` +
-    `If the candidate is a poor fit, state it directly.\n` +
-    `Use first person voice.\n` +
-    `If uncertainty is high, explicitly say so.\n` +
+    `You are the AI assistant for Kris SayreSmith's consulting portfolio.\n` +
+    `Kris is an AI Finance Consultant — a CPA with 15+ years of FP&A experience who helps mid-market companies identify where AI can improve their finance operations.\n` +
+    `Your job is to help potential clients understand what Kris offers, whether their organization is a good fit, and what to expect from an engagement.\n` +
+    `Always be honest and concrete. Never fabricate credentials or outcomes.\n` +
+    `If a potential client's situation is outside Kris's scope — tax compliance, audit, companies under 20 employees, or mid-implementation support — say so directly.\n` +
+    `Use first person voice as if Kris is speaking.\n` +
+    `If uncertainty is high, say so explicitly rather than guessing.\n` +
     `Keep answers concise and specific unless asked for detail.\n\n` +
-    `Candidate context:\n${contextBlock}\n\n` +
+    `Consulting context:\n${activeContext}\n\n` +
     `Recent conversation history:\n${historyBlock}\n`
 
   const llmReply = await callLlmWithRetry(systemPrompt, message)
   let reply =
     llmReply ||
-    "I cannot confidently answer that from current context. I'd rather say that directly than guess."
+    "I can't confidently answer that from the current context. I'd rather say so directly than guess."
   if (detectOverclaimLanguage(reply).length > 0) {
-    reply = "I should be direct: I may not be the right fit for every role, and I'd rather be explicit than oversell."
+    reply = "I should be direct: not every finance challenge is a good fit for an AI assessment, and I'd rather be clear about that than oversell."
   }
 
   if (db && bundle?.candidateId) {
