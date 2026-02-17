@@ -39,6 +39,7 @@
 
 - [x] `npm run calibrate`
 - [x] `npm run regress`
+- [x] `npm run smoke:live`
 - [x] `npm run lint`
 - [x] `npm run build`
 - [ ] Manual UX acceptance (hero fidelity, fit panel, chat drawer, admin auth)

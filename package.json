@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "calibrate": "node scripts/run-calibration.mjs",
     "regress": "node scripts/run-regression.mjs",
-    "seed:remote": "node scripts/seed-remote-context.mjs"
+    "seed:remote": "node scripts/seed-remote-context.mjs",
+    "smoke:live": "node scripts/run-live-smoke.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
