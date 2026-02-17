@@ -54,6 +54,34 @@ From Netlify UI:
 - Login via magic link and confirm admin save works.
 - Run JD analyzer and chat and verify direct non-fit behavior is preserved.
 
+## 6) One-time production context overwrite (consulting seed)
+
+Use this to replace existing candidate context with the canonical consulting dataset from
+`src/lib/seedData.ts`.
+
+Required shell env vars:
+
+- `SUPABASE_URL=https://pxacpumgnxndwbkxkbao.supabase.co`
+- `SUPABASE_SERVICE_ROLE_KEY=<service role key>`
+- `ALLOW_PROD_OVERWRITE=true`
+
+Command:
+
+```bash
+npm run seed:remote
+```
+
+Expected output includes deterministic counts for:
+
+- `candidate_profile`
+- `experiences`
+- `skills`
+- `gaps_weaknesses`
+- `faq_responses`
+- `ai_instructions`
+
+If any table write fails, the command exits non-zero.
+
 ## Next steps (test pass checklist)
 
 Run local verification:
@@ -71,4 +99,4 @@ Then verify in production:
 - Supabase auth: magic link sign-in succeeds
 - JD analyzer: returns honest-fit output with expected context
 - Chat drawer: responses respect honesty and context boundaries
-
+- Fit assessment copy: client-problem framing appears (no job-seeker wording on primary flow)

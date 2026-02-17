@@ -28,12 +28,12 @@
 
 ## Content Population
 
-- [ ] Fill complete profile and narrative
-- [ ] Populate all roles with deep private context
-- [ ] Populate values and culture-fit fields
-- [ ] Add explicit gaps, bad-fit role types, and no-interest areas
-- [ ] Populate FAQ pairs
-- [ ] Populate anti-sycophancy instruction priorities
+- [ ] Run production overwrite seeding command with guard:
+  - `SUPABASE_URL=<project-url> SUPABASE_SERVICE_ROLE_KEY=<service-role-key> ALLOW_PROD_OVERWRITE=true npm run seed:remote`
+- [ ] Verify script output counts match seed payload for:
+  - `candidate_profile`, `experiences`, `skills`, `gaps_weaknesses`, `faq_responses`, `ai_instructions`
+- [ ] Open `/admin` and confirm consulting profile/context is present
+- [ ] Spot-check FAQ, gaps, and AI instructions reflect consulting positioning
 
 ## Validation Gates
 
@@ -43,4 +43,4 @@
 - [x] `npm run build`
 - [ ] Manual UX acceptance (hero fidelity, fit panel, chat drawer, admin auth)
 - [ ] Manual bad-fit JD checks against live model
-
+- [ ] Confirm Fit Assessment copy uses client-problem framing end-to-end
