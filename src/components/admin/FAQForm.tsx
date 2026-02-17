@@ -14,7 +14,7 @@ export function FAQForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card policy-card">
       <h3>FAQ / Common Questions</h3>
       {draft.map((faq, idx) => (
         <div key={faq.id} className="sub-card">

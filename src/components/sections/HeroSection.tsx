@@ -9,9 +9,9 @@ export function HeroSection({ profile, onAskAI }: Props) {
   return (
     <section className="hero">
       <div className="status-badge">🟢 Open to {profile.targetTitles[0]} at {profile.targetCompanyStages[0]}</div>
-      <h1>{profile.fullName}</h1>
-      <h2>{profile.title}</h2>
-      <p>{profile.elevatorPitch}</p>
+      <h1 className="hero-title">{profile.fullName}</h1>
+      <h2 className="hero-subtitle">{profile.title}</h2>
+      <p className="hero-copy">{profile.elevatorPitch}</p>
       <div className="pill-row">
         {profile.targetCompanyStages.map((stage) => (
           <span key={stage} className="pill">

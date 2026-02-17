@@ -10,8 +10,9 @@ function byCategory(skills: SkillItem[], category: SkillItem['category']) {
 
 export function SkillsMatrix({ skills }: Props) {
   return (
-    <section>
+    <section className="section-shell">
       <h3>Skills Matrix</h3>
+      <p className="section-subtext">Capability map with clear signal on strengths, growth edges, and gaps.</p>
       <div className="skill-matrix">
         <div className="card strong">
           <h4>Strong</h4>

@@ -7,9 +7,11 @@ type Props = {
 
 export function ExperienceSection({ experiences }: Props) {
   return (
-    <section id="experience">
+    <section id="experience" className="section-shell">
       <h3>Experience</h3>
-      <p>Each role includes queryable AI context-the real story behind the bullet points.</p>
+      <p className="section-subtext">
+        Each role includes queryable AI context - the real story behind the bullet points.
+      </p>
       <div className="grid">
         {experiences.map((exp) => (
           <ExperienceCard key={exp.id} experience={exp} />

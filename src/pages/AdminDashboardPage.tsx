@@ -15,11 +15,11 @@ export function AdminDashboardPage() {
   const { authEnabled, email, signOut } = useAdminAuth()
 
   if (isLoading || !context) {
-    return <main className="container">Loading admin context...</main>
+    return <main className="container admin-shell">Loading admin context...</main>
   }
 
   return (
-    <main className="container">
+    <main className="container admin-shell">
       <header className="admin-header">
         <h1>Admin Context Console</h1>
         <div className="row">
@@ -33,7 +33,7 @@ export function AdminDashboardPage() {
           )}
         </div>
       </header>
-      <p>
+      <p className="section-subtext">
         Edit private and public context, then save section-by-section. Changes are persisted to the
         active data store.
       </p>

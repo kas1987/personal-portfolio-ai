@@ -17,7 +17,7 @@ export function ValuesCultureForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card policy-card">
       <h3>Values & Culture Fit</h3>
       <label>
         Must-Haves (comma-separated)

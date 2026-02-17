@@ -14,7 +14,7 @@ export function SkillsForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card data-entry-card">
       <h3>Skills Self-Assessment</h3>
       {draft.map((skill, idx) => (
         <div key={skill.id} className="sub-card">

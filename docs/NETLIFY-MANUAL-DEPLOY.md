@@ -2,7 +2,17 @@
 
 Use this when direct Netlify API access is not provided.
 
+## What's live now
+
+- Frontend URL: `https://job-analyzer-deploy.netlify.app/`
+- GitHub integration: auto-deploy on push to `main`
+- Build pipeline: `npm run build` -> `dist`
+- SPA routing: `/* -> /index.html (200)` enabled
+- Production environment variables: configured
+
 ## 1) Configure environment variables in Netlify
+
+Important: select repository **`kas1987/personal-portfolio-ai`** (branch `main`), not `kas1987/.07_Job`.
 
 Set these in Site Settings -> Environment Variables:
 
@@ -43,4 +53,22 @@ From Netlify UI:
 - Open `/admin` and confirm redirect to `/admin/login`.
 - Login via magic link and confirm admin save works.
 - Run JD analyzer and chat and verify direct non-fit behavior is preserved.
+
+## Next steps (test pass checklist)
+
+Run local verification:
+
+```bash
+git clone https://github.com/kas1987/personal-portfolio-ai.git
+cd personal-portfolio-ai
+npm install
+npm run dev
+```
+
+Then verify in production:
+
+- Admin panel: `https://job-analyzer-deploy.netlify.app/admin`
+- Supabase auth: magic link sign-in succeeds
+- JD analyzer: returns honest-fit output with expected context
+- Chat drawer: responses respect honesty and context boundaries
 

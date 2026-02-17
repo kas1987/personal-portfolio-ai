@@ -14,7 +14,7 @@ export function InstructionsForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card policy-card">
       <h3>AI Instructions (Brutal Honesty Controls)</h3>
       {draft.map((instruction, idx) => (
         <div key={instruction.id} className="sub-card">

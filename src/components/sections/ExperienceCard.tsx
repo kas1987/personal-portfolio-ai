@@ -9,10 +9,10 @@ export function ExperienceCard({ experience }: Props) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <article className="card">
+    <article className="card experience-card">
       <div className="card-header">
         <strong>{experience.companyName}</strong>
-        <span>{experience.dateRange}</span>
+        <span className="muted">{experience.dateRange}</span>
       </div>
       <div>{experience.title}</div>
       <ul>

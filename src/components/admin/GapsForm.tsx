@@ -21,7 +21,7 @@ export function GapsForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card risk-card">
       <h3>Gaps & Weaknesses</h3>
       {draft.map((gap, idx) => (
         <div key={gap.id} className="sub-card">

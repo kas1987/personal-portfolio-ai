@@ -28,6 +28,12 @@ Open:
 - Public: `http://localhost:5173/`
 - Admin: `http://localhost:5173/admin`
 
+## Production
+
+- Live site: `https://job-analyzer-deploy.netlify.app/`
+- Admin login: `https://job-analyzer-deploy.netlify.app/admin`
+- Auto deploy: push to `main` in `kas1987/personal-portfolio-ai`
+
 ## Environment
 
 Copy `.env.example` to `.env` and adjust:

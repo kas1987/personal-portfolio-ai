@@ -19,7 +19,7 @@ export function PublicPortfolioPage() {
   const publicData = toPublicPortfolioDTO(context)
 
   return (
-    <main className="container">
+    <main className="container public-shell">
       <Navbar onAskAI={() => setChatOpen(true)} />
       <HeroSection profile={publicData.profile} onAskAI={() => setChatOpen(true)} />
       <ExperienceSection experiences={publicData.experiences} />

@@ -11,9 +11,15 @@ export function Navbar({ onAskAI }: Props) {
         KS
       </Link>
       <nav className="nav-links">
-        <a href="#experience">Experience</a>
-        <a href="#fit-check">Fit Check</a>
-        <NavLink to="/admin">Admin</NavLink>
+        <a href="#experience" className="nav-link">
+          Experience
+        </a>
+        <a href="#fit-check" className="nav-link">
+          Fit Check
+        </a>
+        <NavLink to="/admin" className="nav-link">
+          Admin
+        </NavLink>
       </nav>
       <button className="btn btn-primary" onClick={onAskAI}>
         Ask AI <span className="new-badge">New</span>

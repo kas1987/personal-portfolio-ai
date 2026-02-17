@@ -14,7 +14,7 @@ export function ExperienceForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card data-entry-card">
       <h3>Experience Deep Dive</h3>
       {draft.map((exp, idx) => (
         <div key={exp.id} className="sub-card">

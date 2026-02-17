@@ -18,9 +18,9 @@ export function FitAssessment({ context }: Props) {
   }
 
   return (
-    <section id="fit-check">
+    <section id="fit-check" className="section-shell">
       <h3>Honest Fit Assessment</h3>
-      <p>Paste a JD and get an honest assessment, including when fit is poor.</p>
+      <p className="section-subtext">Paste a JD and get an honest assessment, including when fit is poor.</p>
 
       <div className="row">
         <button className="btn btn-secondary" onClick={() => setExample('strong')}>
@@ -46,7 +46,7 @@ export function FitAssessment({ context }: Props) {
       </button>
 
       {analyzer.data && (
-        <div className="result-panel">
+        <div className="result-panel card">
           <h4>⚠ Honest Assessment — {analyzer.data.result.headline}</h4>
           <p>{analyzer.data.result.opening}</p>
           <h5>Where I Don't Fit</h5>

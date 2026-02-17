@@ -17,7 +17,7 @@ export function ProfileForm({ value, onSave }: Props) {
   }
 
   return (
-    <section className="card">
+    <section className="card data-entry-card">
       <h3>Basic Profile</h3>
       <div className="form-grid">
         <label>
