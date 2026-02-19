@@ -1,16 +1,8 @@
 import type { JDAnalysisResult } from '../types/domain'
-
-const BANNED_SOFTENERS = [
-  'game-changing',
-  'revolutionary',
-  'synergy',
-  'world-class',
-  'best-in-class',
-]
+import { detectOverclaimLanguage as detectOverclaimLanguageByPolicy } from './fitHonestyPolicy'
 
 export function detectOverclaimLanguage(text: string): string[] {
-  const lower = text.toLowerCase()
-  return BANNED_SOFTENERS.filter((token) => lower.includes(token))
+  return detectOverclaimLanguageByPolicy(text, 'honesty')
 }
 
 export function honestyChecklist(result: JDAnalysisResult): { pass: boolean; issues: string[] } {

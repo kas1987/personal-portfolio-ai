@@ -11,7 +11,8 @@
     "calibrate": "node scripts/run-calibration.mjs",
     "regress": "node scripts/run-regression.mjs",
     "seed:remote": "node scripts/seed-remote-context.mjs",
-    "smoke:live": "node scripts/run-live-smoke.mjs"
+    "smoke:live": "node scripts/run-live-smoke.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
@@ -34,6 +35,7 @@
     "globals": "^16.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
   }
 }
