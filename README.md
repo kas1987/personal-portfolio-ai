@@ -57,9 +57,17 @@ For production, use `.env.production.example` as the template and set:
 ```bash
 npm run calibrate
 npm run regress
+npm run smoke:live
 npm run lint
 npm run build
 ```
+
+`smoke:live` defaults to production endpoints and can be overridden:
+
+- `FRONTEND_BASE_URL` (default `https://job-analyzer-deploy.netlify.app`)
+- `SUPABASE_FUNCTIONS_BASE_URL` (default `https://pxacpumgnxndwbkxkbao.supabase.co/functions/v1`)
+- `SMOKE_TIMEOUT_MS` (default `15000`)
+- `SMOKE_RETRIES` (default `2`)
 
 ## Launch docs
 
